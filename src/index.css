@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply m-0 p-0 overflow-hidden bg-gray-900 text-gray-100 font-sans;
+  }
+}
+
+/* Glassmorphism utility */
+.glass-panel {
+  @apply bg-black/20 backdrop-blur-sm border border-white/10 shadow-lg;
+}
+
+/* Sakura Wind */
+@keyframes blow-wind {
+  0% { transform: translate(0, var(--y-start)); opacity: 0; }
+  10% { opacity: 0.8; }
+  90% { opacity: 0.8; }
+  100% { transform: translate(110vw, var(--y-end)); opacity: 0; }
+}
+
+/* Water Flow Overlay */
+@keyframes flow-water {
+  0% { background-position: 200% 0; opacity: 0.1; transform: scaleY(0.5) translateX(0); }
+  50% { opacity: 0.4; }
+  100% { background-position: -200% 0; opacity: 0.1; transform: scaleY(0.5) translateX(30px); }
+}
+.animate-flow-water {
+  background-size: 200% 100%;
+  animation: flow-water 4s infinite linear;
+}
+
+/* Smoke Particle */
+@keyframes smoke-rise {
+  0% { transform: translate(0, 0) scale(1); opacity: 0.8; }
+  100% { transform: translate(-20px, -60px) scale(3); opacity: 0; }
+}
+.smoke-particle {
+  animation: smoke-rise 3s infinite forwards ease-in;
+}
+
+/* Truck Wobble */
+@keyframes wobble {
+  0% { transform: translateY(0px) rotate(-5deg); }
+  100% { transform: translateY(-4px) rotate(5deg); }
+}
+.animate-wobble {
+  animation: wobble 0.3s infinite alternate ease-in-out;
+}
+
+/* Chicken Pecking */
+@keyframes peck {
+  0%, 100% { transform: rotate(0deg) translateY(0); }
+  10%, 30% { transform: rotate(45deg) translateY(2px); }
+  20% { transform: rotate(0deg) translateY(0); }
+}
+.animate-peck {
+  animation: peck 4s infinite;
+  transform-origin: bottom left;
+}

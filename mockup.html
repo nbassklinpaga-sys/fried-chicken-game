@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fried Chicken Game - Full Activity Mockup</title>
+    <style>
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden;
+            background-color: #000;
+        }
+        
+        #game-bg {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('../../brain/2c5b019e-7f23-434c-ae19-949e81bb998a/fried_chicken_game_mockup_1781229377312.png');
+            background-size: cover;
+            background-position: center;
+            z-index: 1;
+        }
+
+        /* Tiny Sakura Petal for Wide Angle Perspective */
+        .petal {
+            position: absolute;
+            background: #ffa8ba;
+            border-radius: 50%;
+            opacity: 0.6;
+            pointer-events: none;
+            z-index: 10;
+            filter: blur(0.5px);
+        }
+
+        @keyframes blow-wind {
+            0% { transform: translate(-50px, var(--y-start)) scale(var(--scale-start)); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { transform: translate(110vw, var(--y-end)) scale(var(--scale-end)); opacity: 0; }
+        }
+
+        /* Water Ripple Simulation Overlay */
+        .water-ripple {
+            position: absolute;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+            background-size: 200% 100%;
+            border-radius: 50%;
+            filter: blur(8px);
+            animation: flow-water 3s infinite linear;
+            pointer-events: none;
+            z-index: 5;
+            transform: scaleY(0.3); /* Flatten to match isometric perspective */
+        }
+        
+        @keyframes flow-water {
+            0% { background-position: 200% 0; opacity: 0.1; transform: scaleY(0.3) translateX(0); }
+            50% { opacity: 0.4; }
+            100% { background-position: -200% 0; opacity: 0.1; transform: scaleY(0.3) translateX(20px); }
+        }
+
+        /* Factory Smoke */
+        .smoke {
+            position: absolute;
+            background: rgba(240, 240, 240, 0.7);
+            border-radius: 50%;
+            filter: blur(4px);
+            pointer-events: none;
+            animation: smoke-rise 3s forwards ease-in;
+            z-index: 8;
+        }
+
+        @keyframes smoke-rise {
+            0% { transform: translate(0, 0) scale(1); opacity: 0.8; }
+            100% { transform: translate(-20px, -60px) scale(3); opacity: 0; }
+        }
+
+        /* House Lights Pulsing */
+        .house-light {
+            position: absolute;
+            background: rgba(255, 204, 0, 0.4);
+            border-radius: 50%;
+            filter: blur(6px);
+            animation: pulse-light 4s infinite alternate;
+            z-index: 7;
+            pointer-events: none;
+        }
+
+        @keyframes pulse-light {
+            0% { transform: scale(1); opacity: 0.2; }
+            100% { transform: scale(1.5); opacity: 0.6; }
+        }
+
+        /* People and Chickens walking (Tiny dots for isometric view) */
+        .entity {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 6;
+            box-shadow: 0 0 2px rgba(0,0,0,0.5);
+        }
+        .person { background-color: #3498db; width: 3px; height: 3px; }
+        .chicken { background-color: #f1c40f; width: 2px; height: 2px; }
+
+        @keyframes walk-path-1 {
+            0% { transform: translate(0, 0); opacity: 0; }
+            10% { opacity: 1; }
+            25% { transform: translate(20px, 10px); }
+            50% { transform: translate(40px, 5px); }
+            75% { transform: translate(50px, 20px); }
+            90% { opacity: 1; }
+            100% { transform: translate(60px, 25px); opacity: 0; }
+        }
+        @keyframes walk-path-2 {
+            0% { transform: translate(0, 0); opacity: 0;}
+            10% { opacity: 1;}
+            90% { opacity: 1; }
+            100% { transform: translate(-50px, 15px); opacity: 0; }
+        }
+
+    </style>
+</head>
+<body>
+    <div id="game-bg"></div>
+
+    <!-- Simulated Water Flow area (placed roughly where water might be) -->
+    <div class="water-ripple" style="bottom: 15%; left: 10%; width: 40%; height: 100px;"></div>
+    <div class="water-ripple" style="bottom: 5%; left: 50%; width: 40%; height: 100px; animation-delay: 1.5s;"></div>
+
+    <script>
+        const body = document.body;
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+        
+        // SAKURA WIND
+        function createWindPetal() {
+            const petal = document.createElement('div');
+            petal.className = 'petal';
+            const size = 2 + Math.random() * 4; 
+            petal.style.width = size * (1 + Math.random() * 0.5) + 'px';
+            petal.style.height = size + 'px';
+            petal.style.left = '-20px';
+            const yStart = Math.random() * h;
+            const yEnd = yStart + (Math.random() * 150 - 75); 
+            const scaleStart = 0.5 + Math.random() * 1;
+            const duration = 6 + Math.random() * 6; 
+            petal.style.setProperty('--y-start', yStart + 'px');
+            petal.style.setProperty('--y-end', yEnd + 'px');
+            petal.style.setProperty('--scale-start', scaleStart);
+            petal.style.setProperty('--scale-end', scaleStart);
+            petal.style.animation = `blow-wind ${duration}s linear forwards`;
+            body.appendChild(petal);
+            setTimeout(() => { petal.remove(); }, duration * 1000);
+        }
+        setInterval(createWindPetal, 150);
+        for(let i = 0; i < 40; i++) setTimeout(createWindPetal, Math.random() * 6000);
+
+        // FACTORY SMOKE
+        function createSmoke(xPct, yPct) {
+            const smoke = document.createElement('div');
+            smoke.className = 'smoke';
+            smoke.style.left = `calc(${xPct}% + ${(Math.random() * 10 - 5)}px)`;
+            smoke.style.top = `calc(${yPct}% + ${(Math.random() * 5 - 2)}px)`;
+            const size = 15 + Math.random() * 10;
+            smoke.style.width = size + 'px';
+            smoke.style.height = size + 'px';
+            body.appendChild(smoke);
+            setTimeout(() => { smoke.remove(); }, 3000);
+        }
+        setInterval(() => {
+            // Emitting smoke from areas that look like factories
+            createSmoke(35, 45); 
+            createSmoke(65, 40);
+        }, 600);
+
+        // HOUSE LIGHTS
+        function createLight(xPct, yPct) {
+            const light = document.createElement('div');
+            light.className = 'house-light';
+            light.style.left = xPct + '%';
+            light.style.top = yPct + '%';
+            light.style.width = '20px';
+            light.style.height = '20px';
+            light.style.animationDelay = Math.random() * 2 + 's';
+            body.appendChild(light);
+        }
+        // Static pulsing lights on some buildings
+        createLight(30, 60);
+        createLight(70, 55);
+        createLight(45, 65);
+
+        // PEOPLE & CHICKENS WALKING (Tiny dots)
+        function spawnEntity(type) {
+            const entity = document.createElement('div');
+            entity.className = `entity ${type}`;
+            
+            // Random start near the center paths
+            const startX = 30 + Math.random() * 40; // 30% to 70% width
+            const startY = 50 + Math.random() * 20; // 50% to 70% height
+            entity.style.left = startX + '%';
+            entity.style.top = startY + '%';
+            
+            const duration = 8 + Math.random() * 7; // Slow walk
+            const path = Math.random() > 0.5 ? 'walk-path-1' : 'walk-path-2';
+            entity.style.animation = `${path} ${duration}s linear forwards`;
+            
+            body.appendChild(entity);
+            setTimeout(() => { entity.remove(); }, duration * 1000);
+        }
+
+        setInterval(() => spawnEntity('person'), 1500); // Blue dots
+        setInterval(() => spawnEntity('chicken'), 1000); // Yellow dots
+        
+    </script>
+</body>
+</html>
