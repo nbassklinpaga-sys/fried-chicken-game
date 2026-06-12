@@ -1,0 +1,6 @@
+[phases.caddy]
+cmds = []
+dependsOn = []
+
+[start]
+cmd = "node server/server.js"
