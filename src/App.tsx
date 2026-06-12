@@ -84,7 +84,7 @@ function LobbyScreen() {
   const takenRoles = new Set(players.map(p => p.role).filter(Boolean));
   const isHost = myName === host;
 
-  const roleEmoji: Record<StationId, string> = { restaurant: '&#127831;', distributor: '&#128666;', factory: '&#127981;', farm: '&#127806;' };
+  const roleEmoji: Record<StationId, string> = { restaurant: '🍗', distributor: '🚚', factory: '🏭', farm: '🌾' };
 
   return (
     <div className="min-h-screen bg-gray-950 flex items-center justify-center p-4">
@@ -159,7 +159,7 @@ function LobbyScreen() {
 
 // CHAIN OVERVIEW
 function ChainOverview({ gs }: { gs: ClientGameState }) {
-  const roleEmoji: Record<StationId, string> = { restaurant: '&#127831;', distributor: '&#128666;', factory: '&#127981;', farm: '&#127806;' };
+  const roleEmoji: Record<StationId, string> = { restaurant: '🍗', distributor: '🚚', factory: '🏭', farm: '🌾' };
   return (
     <div className="flex items-center justify-between gap-1 px-2 py-2 bg-black/30 rounded-xl border border-white/5">
       {SUPPLY_CHAIN.map((role, i) => {
