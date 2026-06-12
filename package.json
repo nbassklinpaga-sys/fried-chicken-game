@@ -7,9 +7,9 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "server": "node server/server.js",
+    "server": "node server/server.cjs",
     "dev_all": "concurrently \"npm run server\" \"npm run dev\"",
-    "start": "node server/server.js"
+    "start": "node server/server.cjs"
   },
   "dependencies": {
     "@react-three/drei": "^9.96.1",
